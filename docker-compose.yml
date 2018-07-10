@@ -11,6 +11,7 @@ services:
         command: tail -f /dev/null
         volumes:
             - /var/run/docker.sock:/var/run/docker.sock:ro
+            - ~/.config/gcloud:/root/.config/gcloud
             - .:/srv/sciencebeam-orchester
             - ./config:/srv/sciencebeam-orchester/config
             - ./logs:/srv/sciencebeam-orchester/logs
@@ -24,6 +25,14 @@ services:
             - "8070:8070"
         extra_hosts:
             - "api.crossref.org:127.0.0.1"
+        healthcheck:
+            test: [
+                "CMD", "bash", "-c",
+                "while ! timeout 1 bash -c 'echo > /dev/tcp/localhost/8070'; do sleep 10; done"
+                ]
+            interval: 10s
+            timeout: 10s
+            retries: 5
     cermine:
         image: elifesciences/cermine:${CERMINE_TAG}
         ports:
