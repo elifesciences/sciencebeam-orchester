@@ -1,0 +1,54 @@
+version: '3'
+
+services:
+    sciencebeam-orchester:
+        build:
+            context: .
+            dockerfile: Dockerfile
+            args:
+                SCIENCEBEAM_TAG: ${SCIENCEBEAM_TAG}
+                SCIENCEBEAM_JUDGE_TAG: ${SCIENCEBEAM_JUDGE_TAG}
+        command: tail -f /dev/null
+        volumes:
+            - /var/run/docker.sock:/var/run/docker.sock:ro
+            - .:/srv/sciencebeam-orchester
+            - ./config:/srv/sciencebeam-orchester/config
+            - ./logs:/srv/sciencebeam-orchester/logs
+            - /home/deuser/_git_/elife/pdf-xml/data:/home/deuser/_git_/elife/pdf-xml/data
+            - $LOCAL_DATA_PATH:/srv/data
+    grobid:
+        image: lfoppiano/grobid:${GROBID_TAG}
+        environment:
+            - JAVA_OPTS=-Xmx1g
+        ports:
+            - "8070:8070"
+        extra_hosts:
+            - "api.crossref.org:127.0.0.1"
+    cermine:
+        image: elifesciences/cermine:${CERMINE_TAG}
+        ports:
+            - "8072:8070"
+    scienceparse:
+        image: allenai-docker-public-docker.bintray.io/s2/scienceparse:${SCIENCEPARSE_TAG}
+        ports:
+            - "8071:8080"
+        healthcheck:
+            test: [
+                "CMD", "bash", "-c",
+                "while ! timeout 1 bash -c 'echo > /dev/tcp/localhost/8080'; do sleep 10; done"
+                ]
+            interval: 10s
+            timeout: 10s
+            retries: 5
+    scienceparse-v2:
+        image: allenai-docker-public-docker.bintray.io/s2/spv2:2.10
+        ports:
+            - "8073:8081"
+        healthcheck:
+            test: [
+                "CMD", "bash", "-c",
+                "while ! timeout 1 bash -c 'echo > /dev/tcp/localhost/8081'; do sleep 10; done"
+                ]
+            interval: 10s
+            timeout: 10s
+            retries: 5
