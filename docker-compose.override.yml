@@ -1,0 +1,6 @@
+version: '3'
+
+services:
+    sciencebeam-orchester:
+        volumes:
+            - $SCIENCEBEAM_JUDGE_PATH:/srv/sciencebeam-judge
