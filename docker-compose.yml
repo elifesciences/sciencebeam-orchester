@@ -15,7 +15,6 @@ services:
             - .:/srv/sciencebeam-orchester
             - ./config:/srv/sciencebeam-orchester/config
             - ./logs:/srv/sciencebeam-orchester/logs
-            - /home/deuser/_git_/elife/pdf-xml/data:/home/deuser/_git_/elife/pdf-xml/data
             - $LOCAL_DATA_PATH:/srv/data
     grobid:
         image: lfoppiano/grobid:${GROBID_TAG}
