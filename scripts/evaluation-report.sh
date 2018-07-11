@@ -22,12 +22,10 @@ fi
 kernel_name=$(jupyter kernelspec list --json | jq --raw-output 'first(.kernelspecs | to_entries[] | .key)')
 echo "kernel_name: $kernel_name"
 
-cat conversion-results-tools.ipynb | jq ".metadata.kernelspec.name = \"$kernel_name\"" \
-  > .conversion-results-tools-with-updated-kernel.ipynb
-
-papermill .conversion-results-tools-with-updated-kernel.ipynb \
+papermill conversion-results-tools.ipynb \
   .conversion-results-tools-with-updated-params.ipynb \
   --prepare-only \
+  --kernel=$kernel_name \
   -p data_path "$(dirname $DATA_URL)" \
   -p dataset_relative_paths "$(basename $DATA_URL)" \
   -p tool_names "$ALL_TOOLS_CSV"
@@ -37,6 +35,7 @@ jupyter nbconvert \
   --ExecutePreprocessor.timeout=-1 \
   --FilesWriter.build_directory=/tmp/ \
   --TemplateExporter.exclude_input=True \
+  --ExecutePreprocessor.kernel_name=$kernel_name \
   --execute .conversion-results-tools-with-updated-params.ipynb
 
 $cp_cmd /tmp/.conversion-results-tools-with-updated-params.html $REPORT_URL
