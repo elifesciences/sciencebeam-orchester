@@ -23,7 +23,7 @@ kernel_name=$(jupyter kernelspec list --json | jq --raw-output 'first(.kernelspe
 echo "kernel_name: $kernel_name"
 
 papermill conversion-results-tools.ipynb \
-  .conversion-results-tools-with-updated-params.ipynb \
+  /tmp/.conversion-results-tools-with-updated-params.ipynb \
   --prepare-only \
   --kernel=$kernel_name \
   -p data_path "$(dirname $DATA_URL)" \
@@ -36,6 +36,6 @@ jupyter nbconvert \
   --FilesWriter.build_directory=/tmp/ \
   --TemplateExporter.exclude_input=True \
   --ExecutePreprocessor.kernel_name=$kernel_name \
-  --execute .conversion-results-tools-with-updated-params.ipynb
+  --execute /tmp/.conversion-results-tools-with-updated-params.ipynb
 
 $cp_cmd /tmp/.conversion-results-tools-with-updated-params.html $REPORT_URL
