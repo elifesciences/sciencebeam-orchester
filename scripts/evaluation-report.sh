@@ -30,4 +30,6 @@ jupyter nbconvert \
   --execute .conversion-results-tools-with-updated-params.ipynb
 
 mkdir -p "$(dirname $REPORT_URL)"
-cp -a /tmp/.conversion-results-tools-with-updated-params.html $REPORT_URL
+echo "USER=$USER"
+echo "HOME=$HOME"
+gsutil cp -P /tmp/.conversion-results-tools-with-updated-params.html $REPORT_URL

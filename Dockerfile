@@ -4,7 +4,20 @@ FROM elifesciences/sciencebeam:${SCIENCEBEAM_TAG}
 
 WORKDIR /srv
 
-RUN apt-get install unzip
+RUN uname -a && \
+  apt-get install -y lsb-release && \
+  bash -c 'export CLOUD_SDK_REPO="cloud-sdk-$(lsb_release -c -s)"; \
+    echo "CLOUD_SDK_REPO=$CLOUD_SDK_REPO"; \
+    echo "deb http://packages.cloud.google.com/apt $CLOUD_SDK_REPO main" | \
+    tee -a /etc/apt/sources.list.d/google-cloud-sdk.list' && \
+  curl https://packages.cloud.google.com/apt/doc/apt-key.gpg | apt-key add - && \
+  apt-get update && \
+  apt-get install -y unzip jq && \
+  PYTHONUSERBASE="" \
+  PATH=/usr/local/bin:/usr/local/sbin:/usr/local/bin:/usr/sbin:/usr/bin:/sbin:/bin \
+  apt-get install -y google-cloud-sdk && \
+  curl -sSL https://get.docker.com/ | sh
+
 
 ARG SCIENCEBEAM_JUDGE_TAG=develop
 RUN echo "SCIENCEBEAM_JUDGE_TAG: $SCIENCEBEAM_JUDGE_TAG" && wget \
@@ -18,14 +31,12 @@ RUN echo "SCIENCEBEAM_JUDGE_TAG: $SCIENCEBEAM_JUDGE_TAG" && wget \
 WORKDIR /srv/sciencebeam-judge
 
 RUN pip install -r requirements.txt
-RUN pip install papermill
-RUN pip install ipykernel && python -m ipykernel install --user
-RUN apt-get install jq -y
-
-RUN curl -sSL https://get.docker.com/ | sh && \
-  pip install docker-compose
 
 WORKDIR /srv/sciencebeam-orchester
+
+COPY requirements.txt ./
+RUN pip install -r requirements.txt
+RUN pip install ipykernel==4.8.2 && python -m ipykernel install --user
 
 COPY ./scripts ./scripts
 COPY *.sh ./
