@@ -27,6 +27,7 @@ cat conversion-results-tools.ipynb | jq ".metadata.kernelspec.name = \"$kernel_n
 
 papermill .conversion-results-tools-with-updated-kernel.ipynb \
   .conversion-results-tools-with-updated-params.ipynb \
+  --prepare-only \
   -p data_path "$(dirname $DATA_URL)" \
   -p dataset_relative_paths "$(basename $DATA_URL)" \
   -p tool_names "$ALL_TOOLS_CSV"
