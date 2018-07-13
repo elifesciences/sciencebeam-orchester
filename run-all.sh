@@ -62,6 +62,9 @@ fi
 if [ "$task" == "generate-file-list" ] || [ "$task" == "evaluation-report" ]; then
   export ALL_TOOLS
   TOOLS=all
+fi
+
+if [ "$task" != "convert" ]; then
   START_STOP_TOOL=false
 fi
 
