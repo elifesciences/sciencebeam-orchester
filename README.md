@@ -21,17 +21,17 @@ Tools are configured in: _./config/tools_, each _.sh_ file describing one tool.
 By default the corresponding container is started and stopped from within the _sciencebeam-orchester_ container.
 
 ```bash
-docker-compose run -rm sciencebeam-orchester ./run-all.sh convert
+docker-compose run --rm sciencebeam-orchester ./run-all.sh convert
 ```
 
 For an invidual dataset and conversion tool:
 
 ```bash
-docker-compose run -rm sciencebeam-orchester ./run-all.sh --dataset pmc-1943-cc-by-sample --tool grobid-tei --force convert
+docker-compose run --rm sciencebeam-orchester ./run-all.sh --dataset pmc-1943-cc-by-sample --tool grobid-tei --force convert
 ```
 
 ```bash
-docker-compose run -rm sciencebeam-orchester ./run-all.sh evaluation-report
+docker-compose run --rm sciencebeam-orchester ./run-all.sh evaluation-report
 ```
 
 ## Running individual containers
