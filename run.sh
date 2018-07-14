@@ -3,6 +3,7 @@
 set -e
 
 LIMIT=1000
+CASCADE=false
 
 POSITIONAL=()
 while [[ $# -gt 0 ]]; do
@@ -23,6 +24,10 @@ while [[ $# -gt 0 ]]; do
       LIMIT="$2"
       shift # past argument
       shift # past value
+      ;;
+    -c|--cascade)
+      CASCADE=true
+      shift # past argument
       ;;
     *)    # unknown option
       POSITIONAL+=("$1") # save it in an array for later
@@ -82,7 +87,9 @@ convert() {
   echo "pwd: $(pwd)"
   (. ./scripts/convert.sh)
   get_output_file_list
-  evaluate
+  if [ "$CASCADE" == true ]; then
+    evaluate
+  fi
 }
 
 case "$1" in 
