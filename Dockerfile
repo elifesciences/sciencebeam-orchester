@@ -18,7 +18,6 @@ RUN uname -a && \
   apt-get install -y google-cloud-sdk && \
   curl -sSL https://get.docker.com/ | sh
 
-
 ARG SCIENCEBEAM_JUDGE_COMMIT=develop
 RUN echo "SCIENCEBEAM_JUDGE_COMMIT: $SCIENCEBEAM_JUDGE_COMMIT" && wget \
   --output-document sciencebeam-judge.zip \
@@ -41,3 +40,14 @@ RUN pip install ipykernel==4.8.2 && python -m ipykernel install --user
 COPY ./scripts ./scripts
 COPY *.sh ./
 RUN ls -l scripts/
+
+RUN apt-get install -y python3 python3-pip
+
+ENV PY3_VENV=/srv/py3-venv
+RUN virtualenv -p python3 $PY3_VENV
+RUN ${PY3_VENV}/bin/pip install ipykernel==4.8.2 && \
+  ${PY3_VENV}/bin/python3 -m ipykernel install --user && \
+  ${PY3_VENV}/bin/jupyter kernelspec list --json | jq --raw-output 'first(.kernelspecs | to_entries[] | .key)'
+
+COPY requirements.py3.txt ./
+RUN ${PY3_VENV}/bin/pip install -r requirements.py3.txt

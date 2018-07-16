@@ -4,6 +4,17 @@ set -e
 
 cd ../sciencebeam-judge/notebooks
 
+PYTHON_SCRIPT_PREFIX=""
+echo "PY3_VENV=$PY3_VENV"
+if [ ! -z "$PY3_VENV" ]; then
+  echo "activating $PY3_VENV"
+  source "$PY3_VENV/bin/activate"
+  python --version
+  PYTHON_SCRIPT_PREFIX="$PY3_VENV/bin/"
+fi
+
+echo "PYTHON_SCRIPT_PREFIX=$PYTHON_SCRIPT_PREFIX"
+
 ALL_TOOLS_CSV=$(echo $ALL_TOOLS | tr ' ' ',')
 echo "ALL_TOOLS_CSV=$ALL_TOOLS_CSV"
 
@@ -19,16 +30,16 @@ else
   cp_cmd="cp -a"
 fi
 
-kernel_name=$(jupyter kernelspec list --json | jq --raw-output 'first(.kernelspecs | to_entries[] | .key)')
+kernel_name=$(${PYTHON_SCRIPT_PREFIX}jupyter kernelspec list --json | jq --raw-output 'first(.kernelspecs | to_entries[] | .key)')
 echo "kernel_name: $kernel_name"
 
 papermill conversion-results-tools.ipynb \
   /tmp/.conversion-results-tools-with-updated-params.ipynb \
-  --prepare-only \
   --kernel=$kernel_name \
   -p data_path "$(dirname $DATA_URL)" \
   -p dataset_relative_paths "$(basename $DATA_URL)" \
   -p tool_names "$ALL_TOOLS_CSV"
+  # --prepare-only \
 
 jupyter nbconvert \
   --ExecutePreprocessor.allow_errors=True \
