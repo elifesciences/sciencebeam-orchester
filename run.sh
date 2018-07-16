@@ -3,6 +3,7 @@
 set -e
 
 LIMIT=1000
+RESUME=false
 CASCADE=false
 
 POSITIONAL=()
@@ -24,6 +25,10 @@ while [[ $# -gt 0 ]]; do
       LIMIT="$2"
       shift # past argument
       shift # past value
+      ;;
+    -r|--resume)
+      RESUME=true
+      shift # past argument
       ;;
     -c|--cascade)
       CASCADE=true
@@ -84,6 +89,9 @@ generate_file_list() {
 
 convert() {
   _setup_vars
+  if [ "$RESUME" == true ]; then
+    SCIENCEBEAM_ARGS="--resume $SCIENCEBEAM_ARGS"
+  fi
   echo "pwd: $(pwd)"
   (. ./scripts/convert.sh)
   get_output_file_list

@@ -12,6 +12,8 @@ ALL_TOOLS=$(for x in $ALL_TOOLS; do echo $(basename $x .sh); done)
 
 TOOLS="$ALL_TOOLS"
 
+RESUME=false
+
 source "./config/.config.sh"
 
 POSITIONAL=()
@@ -33,6 +35,10 @@ while [[ $# -gt 0 ]]; do
       shift # past argument
       shift # past value
       ;;
+    -r|--resume)
+      RESUME=true
+      shift # past argument
+      ;;
     -f|--force)
       FORCE=true
       shift # past argument
@@ -52,6 +58,12 @@ echo "LIMIT: $LIMIT"
 
 mkdir -p logs
 mkdir -p state
+
+RUN_ARGS=""
+
+if [ "$RESUME" == true ]; then
+  RUN_ARGS="--resume $RUN_ARGS"
+fi
 
 task=$1
 
@@ -99,7 +111,7 @@ for dataset_name in $DATASETS; do
         trap _stop_tool EXIT
       fi
 
-      ./run.sh --dataset $dataset_name --tool $tool_name $task >> $log_file 2>&1
+      ./run.sh --dataset $dataset_name --tool $tool_name $RUN_ARGS $task >> $log_file 2>&1
 
       if [ "$START_STOP_TOOL" == true ]; then
         _stop_tool
