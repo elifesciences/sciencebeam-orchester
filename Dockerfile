@@ -1,6 +1,6 @@
-ARG SCIENCEBEAM_TAG=latest
+ARG SCIENCEBEAM_COMMIT=latest
 
-FROM elifesciences/sciencebeam:${SCIENCEBEAM_TAG}
+FROM elifesciences/sciencebeam:${SCIENCEBEAM_COMMIT}
 
 WORKDIR /srv
 
@@ -19,10 +19,10 @@ RUN uname -a && \
   curl -sSL https://get.docker.com/ | sh
 
 
-ARG SCIENCEBEAM_JUDGE_TAG=develop
-RUN echo "SCIENCEBEAM_JUDGE_TAG: $SCIENCEBEAM_JUDGE_TAG" && wget \
+ARG SCIENCEBEAM_JUDGE_COMMIT=develop
+RUN echo "SCIENCEBEAM_JUDGE_COMMIT: $SCIENCEBEAM_JUDGE_COMMIT" && wget \
   --output-document sciencebeam-judge.zip \
-  https://github.com/elifesciences/sciencebeam-judge/archive/${SCIENCEBEAM_JUDGE_TAG}.zip && \
+  https://github.com/elifesciences/sciencebeam-judge/archive/${SCIENCEBEAM_JUDGE_COMMIT}.zip && \
   unzip sciencebeam-judge.zip -d . && \
   mv sciencebeam-judge-* sciencebeam-judge && \
   rm sciencebeam-judge.zip && \

@@ -6,8 +6,8 @@ services:
             context: .
             dockerfile: Dockerfile
             args:
-                SCIENCEBEAM_TAG: ${SCIENCEBEAM_TAG}
-                SCIENCEBEAM_JUDGE_TAG: ${SCIENCEBEAM_JUDGE_TAG}
+                SCIENCEBEAM_COMMIT: ${SCIENCEBEAM_COMMIT}
+                SCIENCEBEAM_JUDGE_COMMIT: ${SCIENCEBEAM_JUDGE_COMMIT}
         command: tail -f /dev/null
         volumes:
             - /var/run/docker.sock:/var/run/docker.sock:ro
