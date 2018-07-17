@@ -47,7 +47,10 @@ ENV PY3_VENV=/srv/py3-venv
 RUN virtualenv -p python3 $PY3_VENV
 RUN ${PY3_VENV}/bin/pip install ipykernel==4.8.2 && \
   ${PY3_VENV}/bin/python3 -m ipykernel install --user && \
-  ${PY3_VENV}/bin/jupyter kernelspec list --json | jq --raw-output 'first(.kernelspecs | to_entries[] | .key)'
+  ${PY3_VENV}/bin/jupyter kernelspec list --json | jq --raw-output '.kernelspecs | to_entries[] | .key'
 
 COPY requirements.py3.txt ./
 RUN ${PY3_VENV}/bin/pip install -r requirements.py3.txt
+
+RUN echo 'main python dependencies' && pip freeze
+RUN echo 'python3 dependencies' && ${PY3_VENV}/bin/pip freeze
