@@ -27,7 +27,14 @@ docker-compose run --rm sciencebeam-orchester ./run-all.sh convert
 For an invidual dataset and conversion tool:
 
 ```bash
-docker-compose run --rm sciencebeam-orchester ./run-all.sh --dataset pmc-1943-cc-by-sample --tool grobid-tei --force convert
+docker-compose run --rm sciencebeam-orchester \
+  ./run-all.sh \
+  --dataset pmc-1943-cc-by-sample \
+  --tool grobid-tei \
+  --force \
+  --limit 1000 \
+  --workers 10 \
+  convert
 ```
 
 ```bash
