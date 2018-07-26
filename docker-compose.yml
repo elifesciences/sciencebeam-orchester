@@ -36,6 +36,14 @@ services:
         image: elifesciences/cermine:${CERMINE_TAG}
         ports:
             - "8072:8070"
+    contentmine:
+        image: elifesciences/contentmine:${CONTENTMINE_TAG}
+        ports:
+            - "8076:8070"
+    metypeset:
+        image: elifesciences/metypeset:${METYPESET_TAG}
+        ports:
+            - "8074:8070"
     scienceparse-v1:
         image: allenai/scienceparse:${SCIENCEPARSE_TAG}
         ports:
@@ -60,7 +68,3 @@ services:
             interval: 10s
             timeout: 10s
             retries: 5
-    metypeset:
-        image: elifesciences/metypeset:${METYPESET_TAG}
-        ports:
-            - "8074:8070"
