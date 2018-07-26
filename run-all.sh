@@ -13,6 +13,7 @@ ALL_TOOLS=$(for x in $ALL_TOOLS; do echo $(basename $x .sh); done)
 TOOLS="$ALL_TOOLS"
 
 RESUME=false
+NUM_WORKERS=1
 
 source "./config/.config.sh"
 
@@ -32,6 +33,11 @@ while [[ $# -gt 0 ]]; do
       ;;
     -l|--limit)
       LIMIT="$2"
+      shift # past argument
+      shift # past value
+      ;;
+    -w|--workers)
+      NUM_WORKERS="$2"
       shift # past argument
       shift # past value
       ;;
@@ -55,6 +61,7 @@ set -- "${POSITIONAL[@]}" # restore positional parameters
 echo "DATASETS: $(echo $DATASETS | tr '\n' ' ')"
 echo "TOOLS: $(echo $TOOLS | tr '\n' ' ')"
 echo "LIMIT: $LIMIT"
+echo "NUM_WORKERS: $NUM_WORKERS"
 
 mkdir -p logs
 mkdir -p state
@@ -63,6 +70,10 @@ RUN_ARGS=""
 
 if [ "$RESUME" == true ]; then
   RUN_ARGS="--resume $RUN_ARGS"
+fi
+
+if [ ! -z "$NUM_WORKERS" ]; then
+  RUN_ARGS="--workers $NUM_WORKERS"
 fi
 
 task=$1

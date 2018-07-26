@@ -5,6 +5,7 @@ set -e
 LIMIT=1000
 RESUME=false
 CASCADE=false
+NUM_WORKERS=1
 
 POSITIONAL=()
 while [[ $# -gt 0 ]]; do
@@ -23,6 +24,11 @@ while [[ $# -gt 0 ]]; do
       ;;
     -l|--limit)
       LIMIT="$2"
+      shift # past argument
+      shift # past value
+      ;;
+    -w|--workers)
+      NUM_WORKERS="$2"
       shift # past argument
       shift # past value
       ;;
