@@ -57,6 +57,8 @@ fi
 
 
 _setup_vars() {
+  IS_PDF=true
+  SUPPORTS_PDF=true
   source "./config/datasets/$DATASET_NAME.sh"
   if [ "$CONVERSION_TOOL" != "all" ]; then
     source "./config/tools/$CONVERSION_TOOL.sh"
@@ -69,6 +71,10 @@ _setup_vars() {
 
 evaluate() {
   _setup_vars
+  if [ "$IS_PDF" == true ] && [ "$SUPPORTS_PDF" == false ]; then
+    echo "tool does not support PDFs, exiting"
+    exit 0
+  fi
   (. ./scripts/evaluate.sh)
 }
 
@@ -79,6 +85,10 @@ evaluation_report() {
 
 get_output_file_list() {
   _setup_vars
+  if [ "$IS_PDF" == true ] && [ "$SUPPORTS_PDF" == false ]; then
+    echo "tool does not support PDFs, exiting"
+    exit 0
+  fi
   (. ./scripts/get-output-file-list.sh)
 }
 
@@ -89,6 +99,11 @@ generate_file_list() {
 
 convert() {
   _setup_vars
+  if [ "$IS_PDF" == true ] && [ "$SUPPORTS_PDF" == false ]; then
+    echo "tool does not support PDFs, exiting"
+    exit 0
+  fi
+  echo "IS_PDF=$IS_PDF, SUPPORTS_PDF=$SUPPORTS_PDF"
   if [ "$RESUME" == true ]; then
     SCIENCEBEAM_ARGS="--resume $SCIENCEBEAM_ARGS"
   fi

@@ -26,7 +26,7 @@ _get_container_status() {
 _wait_for_container_healthy() {
   container_name=$1
   echo "waiting for container $container_name to be healthy"
-  until [ $(_get_container_status $container_name) == "healthy" ]; do
+  until [ "$(_get_container_status $container_name)" == "healthy" ]; do
     echo -n '.'
     sleep 1
   done
@@ -35,7 +35,7 @@ _wait_for_container_healthy() {
 
 _wait_for_service_healthy() {
   service_name=$1
-  container_name=$(docker-compose ps $service_name | grep Up | cut -f 1 -d ' ')
+  container_name=$(docker-compose ps -q $service_name)
   if [ -z "$container_name" ]; then
     echo "container for service not up: $service_name"
     exit -2

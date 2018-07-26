@@ -37,7 +37,7 @@ services:
         ports:
             - "8072:8070"
     scienceparse-v1:
-        image: allenai-docker-public-docker.bintray.io/s2/scienceparse:${SCIENCEPARSE_TAG}
+        image: allenai/scienceparse:${SCIENCEPARSE_TAG}
         ports:
             - "8071:8080"
         healthcheck:
@@ -49,7 +49,7 @@ services:
             timeout: 10s
             retries: 5
     scienceparse-v2:
-        image: allenai-docker-public-docker.bintray.io/s2/spv2:2.10
+        image: allenai/spv2:2.10
         ports:
             - "8073:8081"
         healthcheck:
@@ -60,3 +60,7 @@ services:
             interval: 10s
             timeout: 10s
             retries: 5
+    metypeset:
+        image: elifesciences/metypeset:${METYPESET_TAG}
+        ports:
+            - "8074:8070"
