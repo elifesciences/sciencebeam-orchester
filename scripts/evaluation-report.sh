@@ -21,9 +21,16 @@ echo "ALL_TOOLS_CSV=$ALL_TOOLS_CSV"
 BASE_REPORT_URL=$RESULTS_URL/evaluation-results/report$DATA_SUFFIX
 echo "BASE_REPORT_URL=$BASE_REPORT_URL"
 
+gsutil_cp() {
+  source="$1"
+  target="$2"
+  gsutil cp -P "$source" "$target"
+  gsutil -m acl set -a public-read "$target"
+}
+
 if [[ $BASE_REPORT_URL =~ ^gs.* ]]; then
   echo "report url is gs"
-  cp_cmd="gsutil cp -P"
+  cp_cmd="gsutil_cp "
 else
   echo "report url is not gs"
   mkdir -p "$BASE_REPORT_URL"
