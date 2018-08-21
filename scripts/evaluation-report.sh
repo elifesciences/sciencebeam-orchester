@@ -15,6 +15,27 @@ fi
 
 echo "PYTHON_SCRIPT_PREFIX=$PYTHON_SCRIPT_PREFIX"
 
+echo "IS_PDF=$IS_PDF"
+
+CONFIG_DIR="/srv/sciencebeam-orchester/config"
+
+if [ "$IS_PDF" == true ]; then
+  ALL_TOOLS_SUPPORTING_PDF=()
+  echo "filtering tools that support PDF..."
+  for tool_name in $ALL_TOOLS; do
+    TOOL_SUPPORTS_PDF=$(
+      SUPPORTS_PDF=true bash -c \
+      "source '$CONFIG_DIR/tools/$tool_name.sh' && echo \$SUPPORTS_PDF"
+    )
+    echo "tool: $tool_name, TOOL_SUPPORTS_PDF=$TOOL_SUPPORTS_PDF"
+    if [ "$TOOL_SUPPORTS_PDF" == true ]; then
+      ALL_TOOLS_SUPPORTING_PDF+=("$tool_name")
+    fi
+  done
+  echo "ALL_TOOLS_SUPPORTING_PDF=${ALL_TOOLS_SUPPORTING_PDF[@]}"
+  ALL_TOOLS=${ALL_TOOLS_SUPPORTING_PDF[@]}
+fi
+
 ALL_TOOLS_CSV=$(echo $ALL_TOOLS | tr ' ' ',')
 echo "ALL_TOOLS_CSV=$ALL_TOOLS_CSV"
 
