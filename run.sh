@@ -65,6 +65,7 @@ fi
 _setup_vars() {
   IS_PDF=true
   SUPPORTS_PDF=true
+  SOURCE_FILE_COLUMN=source_url
   source "./config/datasets/$DATASET_NAME.sh"
   if [ "$CONVERSION_TOOL" != "all" ]; then
     source "./config/tools/$CONVERSION_TOOL.sh"
