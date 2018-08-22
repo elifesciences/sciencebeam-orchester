@@ -68,12 +68,16 @@ mkdir -p state
 
 RUN_ARGS=""
 
+if [ ! -z "$LIMIT" ]; then
+  RUN_ARGS="--limit $LIMIT $RUN_ARGS"
+fi
+
 if [ "$RESUME" == true ]; then
   RUN_ARGS="--resume $RUN_ARGS"
 fi
 
 if [ ! -z "$NUM_WORKERS" ]; then
-  RUN_ARGS="--workers $NUM_WORKERS"
+  RUN_ARGS="--workers $NUM_WORKERS $RUN_ARGS"
 fi
 
 task=$1
