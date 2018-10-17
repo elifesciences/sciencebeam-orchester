@@ -73,7 +73,7 @@ _setup_vars() {
   source "./config/.config.sh"
 
   RESULTS_URL=$DATA_URL-results
-  OUTPUT_FILE_LIST=file-list-$CONVERSION_TOOL.lst
+  OUTPUT_FILE_LIST=file-list$DATA_SUFFIX-$CONVERSION_TOOL.lst
 }
 
 evaluate() {
