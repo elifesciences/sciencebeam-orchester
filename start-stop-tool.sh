@@ -45,6 +45,7 @@ _wait_for_service_healthy() {
 
 _start() {
   docker-compose up --no-start
+  docker-compose stop $SERVICE_NAME
   docker-compose start $SERVICE_NAME
   _wait_for_service_healthy $SERVICE_NAME
 }

@@ -32,6 +32,8 @@ services:
             interval: 10s
             timeout: 10s
             retries: 5
+        volumes:
+            - $GROBID_HOST_MODEL:$GROBID_CONTAINER_MODEL
     cermine:
         image: elifesciences/cermine:${CERMINE_TAG}
         ports:
