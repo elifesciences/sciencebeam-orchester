@@ -16,13 +16,16 @@ fi
 echo "PYTHON_SCRIPT_PREFIX=$PYTHON_SCRIPT_PREFIX"
 
 echo "IS_PDF=$IS_PDF"
+echo "DATA_SUFFIX=$DATA_SUFFIX"
 
 CONFIG_DIR="/srv/sciencebeam-orchester/config"
+
+echo "ALL_TOOLS (original)=$ALL_TOOLS"
 
 if [ "$IS_PDF" == true ]; then
   ALL_TOOLS_SUPPORTING_PDF=()
   echo "filtering tools that support PDF..."
-  for tool_name in $ALL_TOOLS; do
+  for tool_name in $(echo $ALL_TOOLS | tr ',' ' '); do
     TOOL_SUPPORTS_PDF=$(
       SUPPORTS_PDF=true bash -c \
       "source '$CONFIG_DIR/tools/$tool_name.sh' && echo \$SUPPORTS_PDF"
@@ -34,6 +37,15 @@ if [ "$IS_PDF" == true ]; then
   done
   echo "ALL_TOOLS_SUPPORTING_PDF=${ALL_TOOLS_SUPPORTING_PDF[@]}"
   ALL_TOOLS=${ALL_TOOLS_SUPPORTING_PDF[@]}
+fi
+
+if [ ! -z "$DATA_SUFFIX" ]; then
+  ALL_TOOLS_WITH_SUFFIX=()
+  echo "adding data suffix ($DATA_SUFFIX)..."
+  for tool_name in $(echo $ALL_TOOLS | tr ',' ' '); do
+    ALL_TOOLS_WITH_SUFFIX+=("$tool_name$DATA_SUFFIX")
+  done
+  ALL_TOOLS=${ALL_TOOLS_WITH_SUFFIX[@]}
 fi
 
 ALL_TOOLS_CSV=$(echo $ALL_TOOLS | tr ' ' ',')
