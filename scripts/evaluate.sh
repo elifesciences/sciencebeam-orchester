@@ -13,4 +13,5 @@ python -m sciencebeam_judge.evaluation_pipeline \
   --output-path $RESULTS_URL/evaluation-results/$CONVERSION_TOOL$DATA_SUFFIX \
   --num_workers=$NUM_WORKERS \
   --limit=$LIMIT \
-  --skip-errors
+  --skip-errors \
+  ${SCIENCEBEAM_JUDGE_ARGS}
