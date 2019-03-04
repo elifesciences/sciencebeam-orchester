@@ -15,8 +15,10 @@ fi
 
 echo "PYTHON_SCRIPT_PREFIX=$PYTHON_SCRIPT_PREFIX"
 
+EVAL_DATA_SUFFIX="${EVAL_DATA_SUFFIX:-$DATA_SUFFIX}"
+
 echo "IS_PDF=$IS_PDF"
-echo "DATA_SUFFIX=$DATA_SUFFIX"
+echo "EVAL_DATA_SUFFIX=$EVAL_DATA_SUFFIX"
 
 CONFIG_DIR="/srv/sciencebeam-orchester/config"
 
@@ -39,11 +41,11 @@ if [ "$IS_PDF" == true ]; then
   ALL_TOOLS=${ALL_TOOLS_SUPPORTING_PDF[@]}
 fi
 
-if [ ! -z "$DATA_SUFFIX" ]; then
+if [ ! -z "$EVAL_DATA_SUFFIX" ]; then
   ALL_TOOLS_WITH_SUFFIX=()
-  echo "adding data suffix ($DATA_SUFFIX)..."
+  echo "adding data suffix ($EVAL_DATA_SUFFIX)..."
   for tool_name in $(echo $ALL_TOOLS | tr ',' ' '); do
-    ALL_TOOLS_WITH_SUFFIX+=("$tool_name$DATA_SUFFIX")
+    ALL_TOOLS_WITH_SUFFIX+=("$tool_name$EVAL_DATA_SUFFIX")
   done
   ALL_TOOLS=${ALL_TOOLS_WITH_SUFFIX[@]}
 fi
@@ -51,7 +53,7 @@ fi
 ALL_TOOLS_CSV=$(echo $ALL_TOOLS | tr ' ' ',')
 echo "ALL_TOOLS_CSV=$ALL_TOOLS_CSV"
 
-BASE_REPORT_URL=$RESULTS_URL/evaluation-results/report$DATA_SUFFIX
+BASE_REPORT_URL=$RESULTS_URL/evaluation-results/report$EVAL_DATA_SUFFIX
 echo "BASE_REPORT_URL=$BASE_REPORT_URL"
 
 gsutil_cp() {
